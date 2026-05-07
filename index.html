@@ -1,209 +1,397 @@
 <!DOCTYPE html>
 <html lang="en">
 <head>
-  <meta charset="UTF-8" />
-  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
-  <title>Cinematic Portfolio</title>
+<meta charset="UTF-8" />
+<meta name="viewport" content="width=device-width, initial-scale=1.0"/>
+<title>Cinematic Portfolio</title>
 
-  <style>
-    * { margin:0; padding:0; box-sizing:border-box; font-family: Arial, sans-serif; }
+<style>
+* {
+  margin:0;
+  padding:0;
+  box-sizing:border-box;
+  font-family: Arial, sans-serif;
+}
 
-    html, body {
-      height:100%;
-      overflow:hidden;
-      background:#000;
-      color:#fff;
-    }
+html, body {
+  height:100%;
+  overflow:hidden;
+  background:#000;
+  color:#fff;
+}
 
-    .container {
-      position:fixed;
-      width:100%;
-      height:100%;
-      top:0;
-      left:0;
-    }
+.container {
+  position:fixed;
+  width:100%;
+  height:100%;
+  top:0;
+  left:0;
+}
 
-    section {
-      position:absolute;
-      width:100%;
-      height:100%;
-      display:flex;
-      justify-content:center;
-      align-items:center;
-      transition: transform 1s cubic-bezier(0.77,0,0.175,1), opacity 1s ease;
-    }
+/* SCENES */
+section {
+  position:absolute;
+  width:100%;
+  height:100%;
+  display:flex;
+  justify-content:center;
+  align-items:center;
+  transition: transform 1s cubic-bezier(0.77,0,0.175,1), opacity 1s ease;
+}
 
-    .hero video, .project video, .project img {
-      position:absolute;
-      width:100%;
-      height:100%;
-      object-fit:cover;
-      z-index:-1;
-      filter:brightness(0.6);
-    }
+/* MEDIA */
+video, img {
+  position:absolute;
+  width:100%;
+  height:100%;
+  object-fit:cover;
+  z-index:-1;
+  filter:brightness(0.8);
+}
 
-    .hero-content { text-align:center; }
-    .hero h1 { font-size:64px; letter-spacing:4px; }
-    .hero p { margin-top:10px; color:#ccc; }
+/* TEXT */
+.hero-content {
+  text-align:center;
+}
 
-    .project-content {
-      position:absolute;
-      bottom:60px;
-      left:60px;
-      max-width:500px;
-    }
+.hero h1 {
+  font-size:64px;
+  letter-spacing:4px;
+}
 
-    .links a {
-      color:#4da6ff;
-      margin-right:15px;
-      text-decoration:none;
-    }
+.hero p {
+  margin-top:10px;
+  color:#ccc;
+}
 
-    /* CAMERA STATES */
-    .active { transform: translateY(0) scale(1); opacity:1; z-index:2; }
-    .above { transform: translateY(-100%) scale(0.92); opacity:0; }
-    .below { transform: translateY(100%) scale(1.08); opacity:0; }
+.project-content {
+  position:absolute;
+  bottom:60px;
+  left:60px;
+  max-width:500px;
+}
 
-    /* VIDEO CONTROL BAR */
-    .video-controls {
-      position: fixed;
-      bottom: 0;
-      left: 0;
-      width: 100%;
-      padding: 20px;
-      background: linear-gradient(to top, rgba(0,0,0,0.85), transparent);
-      opacity: 0;
-      transition: opacity 0.3s;
-      pointer-events: none;
-    }
+.links a {
+  color:#4da6ff;
+  text-decoration:none;
+  margin-right:15px;
+}
 
-    .video-controls.active {
-      opacity: 1;
-      pointer-events: auto;
-    }
+/* CAMERA STATES */
+.active { transform: translateY(0) scale(1); opacity:1; z-index:2; }
+.above { transform: translateY(-100%) scale(0.92); opacity:0; }
+.below { transform: translateY(100%) scale(1.08); opacity:0; }
 
-    #timeline {
-      width: 100%;
-    }
+/* TIMELINE */
+.video-controls {
+  position: fixed;
+  bottom: 0;
+  left: 0;
+  width: 100%;
+  padding: 20px;
+  background: linear-gradient(to top, rgba(0,0,0,0.85), transparent);
+  opacity: 0;
+  transition: 0.3s;
+  pointer-events: none;
+}
 
-  </style>
+.video-controls.active {
+  opacity: 1;
+  pointer-events: auto;
+}
+
+#timeline {
+  width:100%;
+}
+
+/* MULTI VIDEO */
+.vid {
+  display:none;
+  width:100%;
+  height:100%;
+  object-fit:cover;
+  position:absolute;
+  top:0;
+  left:0;
+}
+
+.vid.active {
+  display:block;
+}
+
+/* ARROWS */
+.nav-arrow {
+  position:absolute;
+  top:50%;
+  transform:translateY(-50%);
+  font-size:60px;
+  color:white;
+  cursor:pointer;
+  opacity:0;
+  transition:0.3s;
+  z-index:10;
+  padding:20px;
+  user-select:none;
+}
+
+.nav-arrow.left { left:20px; }
+.nav-arrow.right { right:20px; }
+
+.multi-video:hover .nav-arrow {
+  opacity:0.5;
+}
+
+.nav-arrow:hover {
+  opacity:1;
+}
+
+</style>
 </head>
+
 <body>
 
 <div class="container">
 
-  <section class="hero active">
-    <video autoplay muted loop playsinline>
-      <source src="videos/hero.mp4" type="video/mp4" />
-    </video>
-    <div class="hero-content">
-      <h1>MEI YIFAN</h1>
-      <p>3D Artist • Game Visual Designer</p>
-    </div>
-  </section>
+<!-- HERO -->
+<section class="hero active">
+  <video autoplay muted loop playsinline>
+    <source src="videos/hero.mp4" type="video/mp4">
+  </video>
+  <div class="hero-content">
+    <h1>MEI YIFAN</h1>
+    <p>3D Artist • Game Visual Designer</p>
+  </div>
+</section>
 
-  <section class="project below">
-    <video autoplay muted loop playsinline>
-      <source src="medival/16_MeiYiFan_v-capture.mp4" type="video/mp4" />
-    </video>
-    <div class="project-content">
-      <h2>Medieval Hall</h2>
-      <p>Lighting-driven environment focused on mood.</p>
-      <div class="links">
-        <a href="medival/medieval-breakdown.pdf" target="_blank">Breakdown</a>
-      </div>
+<!-- PROJECT 1 -->
+<section class="project below">
+  <video autoplay muted loop playsinline>
+    <source src="medival/16_MeiYiFan_v-capture.mp4" type="video/mp4">
+  </video>
+  <div class="project-content">
+    <h2>Medieval Hall</h2>
+    <p>Lighting-driven environment focused on mood.</p>
+    <div class="links">
+      <a href="medival/medieval-breakdown.pdf" target="_blank">Breakdown</a>
     </div>
-  </section>
+  </div>
+</section>
 
-  <section class="project below">
-    <video autoplay muted loop playsinline>
-      <source src="scifi/16_meiYifan_buildVid (1)2.mp4" type="video/mp4" />
-    </video>
-    <div class="project-content">
-      <h2>Sci Fi corridor</h2>
-      <p>Storytelling through space and environment.</p>
-      <div class="links">
-        <a href="scifi/scifi-breakdown.pdf" target="_blank">Breakdown</a>
-      </div>
-    </div>
-  </section>
+<!-- PROJECT 2 -->
+<section class="project below">
+  <video autoplay muted loop playsinline>
+    <source src="scifi/16_meiYifan_buildVid (1)2.mp4" type="video/mp4">
+  </video>
+  <div class="project-content">
+    <h2>Sci Fi Corridor</h2>
+    <p>Storytelling through space and environment.</p>
+    <div class="links">
+      <a href="scifi/scifi-breakdown.pdf" target="_blank">Breakdown</a>
+  </div>
+</section>
 
-  <section class="below">
-    <div>
-      <h2>Thought Process</h2>
-      <p>Blockout → modular → lighting → emotion.</p>
-    </div>
-  </section>
+<!-- PROJECT 3 -->
+<section class="project below">
+  <video autoplay muted loop playsinline>
+    <source src="3de/3dde.mp4" type="video/mp4">
+  </video>
+  <div class="project-content">
+    <h2>Island</h2>
+    <p>Level design with VFX.</p>
+  </div>
+</section>
+
+<!-- PROJECT 4 (MULTI VIDEO FIXED) -->
+<section class="project below multi-video">
+
+  <!-- VIDEO 1 -->
+  <video class="vid active" autoplay muted loop playsinline>
+    <source src="3cc/13_meiYifan_CLWK4.mp4" type="video/mp4">
+  </video>
+
+  <!-- VIDEO 2 -->
+  <video class="vid" muted loop playsinline>
+    <source src="3cc/Video Project 1.mp4" type="video/mp4">
+  </video>
+
+  <!-- ARROWS -->
+  <div class="nav-arrow left">‹</div>
+  <div class="nav-arrow right">›</div>
+
+  <div class="project-content">
+    <h2>YinYang Girl</h2>
+    <p>Character design exploration.</p>
+  </div>
+
+</section>
 
 </div>
 
-<!-- VIDEO CONTROL -->
+<!-- TIMELINE -->
 <div class="video-controls" id="controls">
   <input type="range" id="timeline" min="0" max="100" value="0">
 </div>
 
 <script>
+
 let index = 0;
 let isAnimating = false;
+
 const sections = document.querySelectorAll("section");
-const timeline = document.getElementById("timeline");
 const controls = document.getElementById("controls");
-let activeVideo = document.querySelector(".active video");
+const timeline = document.getElementById("timeline");
 
-function updateSections() {
-  sections.forEach((sec, i) => {
-    sec.classList.remove("active","above","below");
+let currentVideo = null;
 
-    if(i < index) sec.classList.add("above");
-    else if(i === index) sec.classList.add("active");
-    else sec.classList.add("below");
-  });
+/* =========================
+   SET ACTIVE VIDEO (SOURCE OF TRUTH)
+========================= */
+function setActiveVideo() {
+  const section = sections[index];
 
-  setTimeout(() => {
-    activeVideo = document.querySelector(".active video");
-  }, 500);
+  if (!section) return;
+
+  // MULTI VIDEO SECTION
+  const multi = section.querySelector(".multi-video");
+
+  if (multi) {
+    const active = multi.querySelector(".vid.active");
+    currentVideo = active;
+    return;
+  }
+
+  // NORMAL VIDEO
+  currentVideo = section.querySelector("video");
 }
 
-window.addEventListener("wheel", (e) => {
+/* =========================
+   SCENES
+========================= */
+function updateScenes() {
+
+  sections.forEach((s,i)=>{
+    s.classList.remove("active","above","below");
+
+    if(i < index) s.classList.add("above");
+    else if(i === index) s.classList.add("active");
+    else s.classList.add("below");
+  });
+
+  setActiveVideo();
+
+  // IMPORTANT RESET
+  if (currentVideo) {
+    currentVideo.currentTime = 0;
+    timeline.value = 0;
+  }
+}
+
+/* =========================
+   SCROLL
+========================= */
+window.addEventListener("wheel",(e)=>{
+
   if(isAnimating) return;
   isAnimating = true;
 
-  if(e.deltaY > 0) index = Math.min(index + 1, sections.length - 1);
-  else index = Math.max(index - 1, 0);
+  if(e.deltaY > 0) index = Math.min(index+1, sections.length-1);
+  else index = Math.max(index-1, 0);
 
-  updateSections();
+  updateScenes();
 
-  setTimeout(() => { isAnimating = false; }, 1000);
+  setTimeout(()=>isAnimating=false,900);
 });
 
-// SHOW CONTROLS WHEN MOUSE NEAR BOTTOM
-document.addEventListener("mousemove", (e) => {
-  if(window.innerHeight - e.clientY < 120) {
+/* =========================
+   TIMELINE SHOW
+========================= */
+document.addEventListener("mousemove",(e)=>{
+  if(window.innerHeight - e.clientY < 120){
     controls.classList.add("active");
   } else {
     controls.classList.remove("active");
   }
 });
 
-// SYNC TIMELINE
-function syncTimeline() {
-  if (!activeVideo || !activeVideo.duration) return;
-  timeline.value = (activeVideo.currentTime / activeVideo.duration) * 100;
-}
-setInterval(syncTimeline, 100);
+/* =========================
+   SYNC (ONLY ONE SOURCE)
+========================= */
+setInterval(()=>{
 
-// SCRUB VIDEO
-timeline.addEventListener("input", () => {
-  if (!activeVideo) return;
-  activeVideo.currentTime = (timeline.value / 100) * activeVideo.duration;
+  if(!currentVideo || !currentVideo.duration) return;
+
+  timeline.value =
+    (currentVideo.currentTime / currentVideo.duration) * 100;
+
+},80);
+
+/* =========================
+   SCRUB
+========================= */
+timeline.addEventListener("input",()=>{
+
+  if(!currentVideo || !currentVideo.duration) return;
+
+  currentVideo.currentTime =
+    (timeline.value / 100) * currentVideo.duration;
+
 });
 
-// CLICK TO PAUSE/PLAY
-document.querySelectorAll("video").forEach(video => {
-  video.addEventListener("click", () => {
-    if(video.paused) video.play();
-    else video.pause();
+/* =========================
+   PLAY / PAUSE
+========================= */
+document.querySelectorAll("video").forEach(v=>{
+  v.addEventListener("click",()=>{
+    v.paused ? v.play() : v.pause();
   });
+});
+
+/* =========================
+   MULTI VIDEO FIX (IMPORTANT)
+========================= */
+document.querySelectorAll(".multi-video").forEach(section=>{
+
+  const vids = section.querySelectorAll(".vid");
+  const left = section.querySelector(".nav-arrow.left");
+  const right = section.querySelector(".nav-arrow.right");
+
+  let i = 0;
+
+  function switchVideo(next){
+
+    vids.forEach(v=>{
+      v.classList.remove("active");
+      v.pause();
+    });
+
+    i = next;
+
+    const v = vids[i];
+    v.classList.add("active");
+
+    v.currentTime = 0;
+
+    // 🔥 CRITICAL: update global reference immediately
+    currentVideo = v;
+    timeline.value = 0;
+
+    const p = v.play();
+    if(p) p.catch(()=>{
+      v.muted = true;
+      v.play();
+    });
+  }
+
+  right.addEventListener("click",(e)=>{
+    e.stopPropagation();
+    switchVideo(1);
+  });
+
+  left.addEventListener("click",(e)=>{
+    e.stopPropagation();
+    switchVideo(0);
+  });
+
 });
 
 </script>
