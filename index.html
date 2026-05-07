@@ -3,7 +3,7 @@
 <head>
 <meta charset="UTF-8" />
 <meta name="viewport" content="width=device-width, initial-scale=1.0"/>
-<title>Cinematic Portfolio</title>
+<title>Mayfan Portfolio</title>
 
 <style>
 * {
@@ -28,7 +28,9 @@ html, body {
   left:0;
 }
 
-/* SCENES */
+/* =========================
+   SCENES
+========================= */
 section {
   position:absolute;
   width:100%;
@@ -37,19 +39,31 @@ section {
   justify-content:center;
   align-items:center;
   transition: transform 1s cubic-bezier(0.77,0,0.175,1), opacity 1s ease;
+
+  z-index: 1; /* 🔥 FIX: base layer */
 }
 
-/* MEDIA */
+/* ACTIVE SCENE ABOVE OTHERS */
+section.active {
+  z-index: 5;
+}
+
+/* =========================
+   MEDIA
+========================= */
 video, img {
   position:absolute;
   width:100%;
   height:100%;
   object-fit:cover;
+
   z-index:-1;
   filter:brightness(0.8);
 }
 
-/* TEXT */
+/* =========================
+   TEXT
+========================= */
 .hero-content {
   text-align:center;
 }
@@ -69,20 +83,29 @@ video, img {
   bottom:60px;
   left:60px;
   max-width:500px;
+
+  z-index:10; /* 🔥 FIX: TEXT ABOVE VIDEO */
 }
 
+/* =========================
+   LINKS
+========================= */
 .links a {
   color:#4da6ff;
   text-decoration:none;
   margin-right:15px;
 }
 
-/* CAMERA STATES */
-.active { transform: translateY(0) scale(1); opacity:1; z-index:2; }
+/* =========================
+   CAMERA STATES
+========================= */
+.active { transform: translateY(0) scale(1); opacity:1; }
 .above { transform: translateY(-100%) scale(0.92); opacity:0; }
 .below { transform: translateY(100%) scale(1.08); opacity:0; }
 
-/* TIMELINE */
+/* =========================
+   TIMELINE
+========================= */
 .video-controls {
   position: fixed;
   bottom: 0;
@@ -93,6 +116,8 @@ video, img {
   opacity: 0;
   transition: 0.3s;
   pointer-events: none;
+
+  z-index: 50; /* 🔥 always on top */
 }
 
 .video-controls.active {
@@ -104,22 +129,36 @@ video, img {
   width:100%;
 }
 
-/* MULTI VIDEO */
+/* =========================
+   MULTI VIDEO
+========================= */
+.multi-video {
+  position: relative;
+}
+
+/* IMPORTANT FIX: NO display:none */
 .vid {
-  display:none;
+  position:absolute;
   width:100%;
   height:100%;
   object-fit:cover;
-  position:absolute;
-  top:0;
-  left:0;
+
+  opacity:0;
+  transition: opacity 0.5s ease;
+  pointer-events:none;
+
+  z-index: 0;
 }
 
 .vid.active {
-  display:block;
+  opacity:1;
+  pointer-events:auto;
+  z-index: 2;
 }
 
-/* ARROWS */
+/* =========================
+   ARROWS
+========================= */
 .nav-arrow {
   position:absolute;
   top:50%;
@@ -129,9 +168,10 @@ video, img {
   cursor:pointer;
   opacity:0;
   transition:0.3s;
-  z-index:10;
   padding:20px;
   user-select:none;
+
+  z-index: 20; /* 🔥 ABOVE EVERYTHING */
 }
 
 .nav-arrow.left { left:20px; }
@@ -154,13 +194,19 @@ video, img {
 
 <!-- HERO -->
 <section class="hero active">
+
   <video autoplay muted loop playsinline>
     <source src="videos/hero.mp4" type="video/mp4">
   </video>
+
+  <!-- LANDING IMAGE -->
+  <img class="landing-img" src="tbrender_Main Camera_007.png" alt="Landing"/>
+
   <div class="hero-content">
     <h1>MEI YIFAN</h1>
     <p>3D Artist • Game Visual Designer</p>
   </div>
+
 </section>
 
 <!-- PROJECT 1 -->
@@ -201,7 +247,7 @@ video, img {
   </div>
 </section>
 
-<!-- PROJECT 4 (MULTI VIDEO FIXED) -->
+<!-- PROJECT 4 -->
 <section class="project below multi-video">
 
   <!-- VIDEO 1 -->
@@ -211,7 +257,7 @@ video, img {
 
   <!-- VIDEO 2 -->
   <video class="vid" muted loop playsinline>
-    <source src="3cc/Video Project 1.mp4" type="video/mp4">
+    <source src="3cc/Video Project 2.mp4" type="video/mp4">
   </video>
 
   <!-- ARROWS -->
@@ -221,6 +267,8 @@ video, img {
   <div class="project-content">
     <h2>YinYang Girl</h2>
     <p>Character design exploration.</p>
+    <div class="links">
+      <a href="3cc/process.pdf" target="_blank">Design process</a>  
   </div>
 
 </section>
@@ -243,30 +291,22 @@ const timeline = document.getElementById("timeline");
 
 let currentVideo = null;
 
-/* =========================
-   SET ACTIVE VIDEO (SOURCE OF TRUTH)
-========================= */
+/* ACTIVE VIDEO */
 function setActiveVideo() {
   const section = sections[index];
 
   if (!section) return;
 
-  // MULTI VIDEO SECTION
   const multi = section.querySelector(".multi-video");
 
   if (multi) {
-    const active = multi.querySelector(".vid.active");
-    currentVideo = active;
-    return;
+    currentVideo = multi.querySelector(".vid.active");
+  } else {
+    currentVideo = section.querySelector("video");
   }
-
-  // NORMAL VIDEO
-  currentVideo = section.querySelector("video");
 }
 
-/* =========================
-   SCENES
-========================= */
+/* SCENES */
 function updateScenes() {
 
   sections.forEach((s,i)=>{
@@ -279,16 +319,13 @@ function updateScenes() {
 
   setActiveVideo();
 
-  // IMPORTANT RESET
   if (currentVideo) {
     currentVideo.currentTime = 0;
     timeline.value = 0;
   }
 }
 
-/* =========================
-   SCROLL
-========================= */
+/* SCROLL */
 window.addEventListener("wheel",(e)=>{
 
   if(isAnimating) return;
@@ -302,9 +339,7 @@ window.addEventListener("wheel",(e)=>{
   setTimeout(()=>isAnimating=false,900);
 });
 
-/* =========================
-   TIMELINE SHOW
-========================= */
+/* TIMELINE UI */
 document.addEventListener("mousemove",(e)=>{
   if(window.innerHeight - e.clientY < 120){
     controls.classList.add("active");
@@ -313,9 +348,7 @@ document.addEventListener("mousemove",(e)=>{
   }
 });
 
-/* =========================
-   SYNC (ONLY ONE SOURCE)
-========================= */
+/* SYNC */
 setInterval(()=>{
 
   if(!currentVideo || !currentVideo.duration) return;
@@ -325,9 +358,7 @@ setInterval(()=>{
 
 },80);
 
-/* =========================
-   SCRUB
-========================= */
+/* SCRUB */
 timeline.addEventListener("input",()=>{
 
   if(!currentVideo || !currentVideo.duration) return;
@@ -337,18 +368,14 @@ timeline.addEventListener("input",()=>{
 
 });
 
-/* =========================
-   PLAY / PAUSE
-========================= */
+/* PLAY PAUSE */
 document.querySelectorAll("video").forEach(v=>{
   v.addEventListener("click",()=>{
     v.paused ? v.play() : v.pause();
   });
 });
 
-/* =========================
-   MULTI VIDEO FIX (IMPORTANT)
-========================= */
+/* MULTI VIDEO SWITCH */
 document.querySelectorAll(".multi-video").forEach(section=>{
 
   const vids = section.querySelectorAll(".vid");
@@ -357,26 +384,24 @@ document.querySelectorAll(".multi-video").forEach(section=>{
 
   let i = 0;
 
-  function switchVideo(next){
+  function switchVideo(n){
 
     vids.forEach(v=>{
       v.classList.remove("active");
       v.pause();
     });
 
-    i = next;
+    i = n;
 
     const v = vids[i];
     v.classList.add("active");
 
     v.currentTime = 0;
 
-    // 🔥 CRITICAL: update global reference immediately
     currentVideo = v;
     timeline.value = 0;
 
-    const p = v.play();
-    if(p) p.catch(()=>{
+    v.play().catch(()=>{
       v.muted = true;
       v.play();
     });
