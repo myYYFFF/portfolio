@@ -1,172 +1,207 @@
 <!DOCTYPE html>
 <html lang="en">
 <head>
-  <meta charset="UTF-8">
-  <meta name="viewport" content="width=device-width, initial-scale=1.0">
-  <title>3D Artist Portfolio</title>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>Cinematic Portfolio</title>
+
   <style>
-    * { margin: 0; padding: 0; box-sizing: border-box; font-family: Arial, sans-serif; }
+    * { margin:0; padding:0; box-sizing:border-box; font-family: Arial, sans-serif; }
 
-    body { background: #0e0e0e; color: #fff; line-height: 1.6; }
-
-    header {
-      padding: 20px 50px;
-      display: flex;
-      justify-content: space-between;
-      align-items: center;
-      position: sticky;
-      top: 0;
-      background: rgba(0,0,0,0.8);
+    html, body {
+      height:100%;
+      overflow:hidden;
+      background:#000;
+      color:#fff;
     }
 
-    nav a { margin-left: 20px; text-decoration: none; color: #aaa; }
-    nav a:hover { color: #fff; }
-
-    .hero {
-      height: 80vh;
-      display: flex;
-      justify-content: center;
-      align-items: center;
-      text-align: center;
+    .container {
+      position:fixed;
+      width:100%;
+      height:100%;
+      top:0;
+      left:0;
     }
 
-    section { padding: 60px 50px; }
-
-    .grid {
-      display: grid;
-      grid-template-columns: repeat(auto-fit, minmax(280px, 1fr));
-      gap: 25px;
+    section {
+      position:absolute;
+      width:100%;
+      height:100%;
+      display:flex;
+      justify-content:center;
+      align-items:center;
+      transition: transform 1s cubic-bezier(0.77,0,0.175,1), opacity 1s ease;
     }
 
-    .card {
-      background: #1a1a1a;
-      border-radius: 12px;
-      overflow: hidden;
-      transition: 0.3s;
+    .hero video, .project video, .project img {
+      position:absolute;
+      width:100%;
+      height:100%;
+      object-fit:cover;
+      z-index:-1;
+      filter:brightness(0.6);
     }
 
-    .card:hover { transform: translateY(-6px); }
+    .hero-content { text-align:center; }
+    .hero h1 { font-size:64px; letter-spacing:4px; }
+    .hero p { margin-top:10px; color:#ccc; }
 
-    .media {
-      width: 100%;
-      height: 200px;
-      object-fit: cover;
-      background: #000;
-    }
-
-    video.media { object-fit: cover; }
-
-    .card-content { padding: 15px; }
-
-    .tag {
-      font-size: 12px;
-      color: #888;
-      margin-bottom: 8px;
+    .project-content {
+      position:absolute;
+      bottom:60px;
+      left:60px;
+      max-width:500px;
     }
 
     .links a {
-      display: inline-block;
-      margin-top: 10px;
-      margin-right: 10px;
-      font-size: 14px;
-      color: #4da6ff;
-      text-decoration: none;
+      color:#4da6ff;
+      margin-right:15px;
+      text-decoration:none;
     }
 
-    .links a:hover { text-decoration: underline; }
+    /* CAMERA STATES */
+    .active { transform: translateY(0) scale(1); opacity:1; z-index:2; }
+    .above { transform: translateY(-100%) scale(0.92); opacity:0; }
+    .below { transform: translateY(100%) scale(1.08); opacity:0; }
 
-    .process {
-      background: #141414;
-      border-left: 3px solid #fff;
+    /* VIDEO CONTROL BAR */
+    .video-controls {
+      position: fixed;
+      bottom: 0;
+      left: 0;
+      width: 100%;
       padding: 20px;
-      margin-bottom: 20px;
+      background: linear-gradient(to top, rgba(0,0,0,0.85), transparent);
+      opacity: 0;
+      transition: opacity 0.3s;
+      pointer-events: none;
     }
 
-    footer { text-align: center; padding: 30px; color: #777; }
+    .video-controls.active {
+      opacity: 1;
+      pointer-events: auto;
+    }
+
+    #timeline {
+      width: 100%;
+    }
+
   </style>
 </head>
 <body>
 
-<header>
-  <h1>Your Name</h1>
-  <nav>
-    <a href="#work">Work</a>
-    <a href="#process">Process</a>
-    <a href="#contact">Contact</a>
-  </nav>
-</header>
+<div class="container">
 
-<section class="hero">
-  <div>
-    <h2>3D Artist & Game Visual Designer</h2>
-    <p>Modeling • Texturing • Lighting • Level Design</p>
-  </div>
-</section>
+  <section class="hero active">
+    <video autoplay muted loop playsinline>
+      <source src="videos/hero.mp4" type="video/mp4" />
+    </video>
+    <div class="hero-content">
+      <h1>MEI YIFAN</h1>
+      <p>3D Artist • Game Visual Designer</p>
+    </div>
+  </section>
 
-<section id="work">
-  <h2>Selected Work</h2>
-  <div class="grid">
-
-    <!-- IMAGE PROJECT -->
-    <div class="card">
-      <img class="media" src="images/work1.jpg" alt="">
-      <div class="card-content">
-        <div class="tag">Unity • HDRP • Environment</div>
-        <h3>Project Title</h3>
-        <p>Sci-fi corridor focusing on lighting contrast and depth.</p>
-        <div class="links">
-          <a href="#">ArtStation</a>
-          <a href="#">Breakdown</a>
-        </div>
+  <section class="project below">
+    <video autoplay muted loop playsinline>
+      <source src="medival/16_MeiYiFan_v-capture.mp4" type="video/mp4" />
+    </video>
+    <div class="project-content">
+      <h2>Medieval Hall</h2>
+      <p>Lighting-driven environment focused on mood.</p>
+      <div class="links">
+        <a href="pdf/medieval-breakdown.pdf" target="_blank">Breakdown</a>
       </div>
     </div>
+  </section>
 
-    <!-- VIDEO PROJECT -->
-    <div class="card">
-      <video class="media" autoplay muted loop playsinline>
-        <source src="videos/demo.mp4" type="video/mp4">
-      </video>
-      <div class="card-content">
-        <div class="tag">Blender • Animation</div>
-        <h3>Animated Environment</h3>
-        <p>Camera motion render showcasing atmosphere and composition.</p>
-        <div class="links">
-          <a href="#">YouTube</a>
-        </div>
-      </div>
+  <section class="project below">
+    <img src="images/project2.jpg" />
+    <div class="project-content">
+      <h2>Abandoned Facility</h2>
+      <p>Storytelling through space and decay.</p>
     </div>
+  </section>
 
-  </div>
-</section>
+  <section class="below">
+    <div>
+      <h2>Thought Process</h2>
+      <p>Blockout → modular → lighting → emotion.</p>
+    </div>
+  </section>
 
-<section id="process">
-  <h2>Thought Process</h2>
+</div>
 
-  <div class="process">
-    <h3>Environment Workflow</h3>
-    <p>
-      Blockout → modular assets → lighting pass → fog & post-processing.
-      Focus on guiding player attention through light and composition.
-    </p>
-  </div>
+<!-- VIDEO CONTROL -->
+<div class="video-controls" id="controls">
+  <input type="range" id="timeline" min="0" max="100" value="0">
+</div>
 
-  <div class="process">
-    <h3>Visual Philosophy</h3>
-    <p>
-      I design spaces that feel lived-in and emotionally weighted, not just visually detailed.
-    </p>
-  </div>
+<script>
+let index = 0;
+let isAnimating = false;
+const sections = document.querySelectorAll("section");
+const timeline = document.getElementById("timeline");
+const controls = document.getElementById("controls");
+let activeVideo = document.querySelector(".active video");
 
-</section>
+function updateSections() {
+  sections.forEach((sec, i) => {
+    sec.classList.remove("active","above","below");
 
-<section id="contact">
-  <h2>Contact</h2>
-  <p>Email: your@email.com</p>
-</section>
+    if(i < index) sec.classList.add("above");
+    else if(i === index) sec.classList.add("active");
+    else sec.classList.add("below");
+  });
 
-<footer>
-  <p>© 2026 Your Name</p>
-</footer>
+  setTimeout(() => {
+    activeVideo = document.querySelector(".active video");
+  }, 500);
+}
+
+window.addEventListener("wheel", (e) => {
+  if(isAnimating) return;
+  isAnimating = true;
+
+  if(e.deltaY > 0) index = Math.min(index + 1, sections.length - 1);
+  else index = Math.max(index - 1, 0);
+
+  updateSections();
+
+  setTimeout(() => { isAnimating = false; }, 1000);
+});
+
+// SHOW CONTROLS WHEN MOUSE NEAR BOTTOM
+document.addEventListener("mousemove", (e) => {
+  if(window.innerHeight - e.clientY < 120) {
+    controls.classList.add("active");
+  } else {
+    controls.classList.remove("active");
+  }
+});
+
+// SYNC TIMELINE
+function syncTimeline() {
+  if (!activeVideo || !activeVideo.duration) return;
+  timeline.value = (activeVideo.currentTime / activeVideo.duration) * 100;
+}
+setInterval(syncTimeline, 100);
+
+// SCRUB VIDEO
+timeline.addEventListener("input", () => {
+  if (!activeVideo) return;
+  activeVideo.currentTime = (timeline.value / 100) * activeVideo.duration;
+});
+
+// CLICK TO PAUSE/PLAY
+document.querySelectorAll("video").forEach(video => {
+  video.addEventListener("click", () => {
+    if(video.paused) video.play();
+    else video.pause();
+  });
+});
+
+</script>
 
 </body>
 </html>
