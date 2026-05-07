@@ -28,9 +28,7 @@ html, body {
   left:0;
 }
 
-/* =========================
-   SCENES
-========================= */
+/* SCENES */
 section {
   position:absolute;
   width:100%;
@@ -39,31 +37,24 @@ section {
   justify-content:center;
   align-items:center;
   transition: transform 1s cubic-bezier(0.77,0,0.175,1), opacity 1s ease;
-
-  z-index: 1; /* 🔥 FIX: base layer */
+  z-index: 1;
 }
 
-/* ACTIVE SCENE ABOVE OTHERS */
 section.active {
   z-index: 5;
 }
 
-/* =========================
-   MEDIA
-========================= */
+/* MEDIA */
 video, img {
   position:absolute;
   width:100%;
   height:100%;
   object-fit:cover;
-
   z-index:-1;
   filter:brightness(0.8);
 }
 
-/* =========================
-   TEXT
-========================= */
+/* TEXT */
 .hero-content {
   text-align:center;
 }
@@ -83,29 +74,21 @@ video, img {
   bottom:60px;
   left:60px;
   max-width:500px;
-
-  z-index:10; /* 🔥 FIX: TEXT ABOVE VIDEO */
+  z-index:10;
 }
 
-/* =========================
-   LINKS
-========================= */
 .links a {
   color:#4da6ff;
   text-decoration:none;
   margin-right:15px;
 }
 
-/* =========================
-   CAMERA STATES
-========================= */
+/* CAMERA STATES */
 .active { transform: translateY(0) scale(1); opacity:1; }
 .above { transform: translateY(-100%) scale(0.92); opacity:0; }
 .below { transform: translateY(100%) scale(1.08); opacity:0; }
 
-/* =========================
-   TIMELINE
-========================= */
+/* TIMELINE */
 .video-controls {
   position: fixed;
   bottom: 0;
@@ -116,8 +99,7 @@ video, img {
   opacity: 0;
   transition: 0.3s;
   pointer-events: none;
-
-  z-index: 50; /* 🔥 always on top */
+  z-index: 50;
 }
 
 .video-controls.active {
@@ -129,14 +111,11 @@ video, img {
   width:100%;
 }
 
-/* =========================
-   MULTI VIDEO
-========================= */
+/* MULTI VIDEO */
 .multi-video {
   position: relative;
 }
 
-/* IMPORTANT FIX: NO display:none */
 .vid {
   position:absolute;
   width:100%;
@@ -146,19 +125,15 @@ video, img {
   opacity:0;
   transition: opacity 0.5s ease;
   pointer-events:none;
-
-  z-index: 0;
 }
 
 .vid.active {
   opacity:1;
   pointer-events:auto;
-  z-index: 2;
+  z-index:2;
 }
 
-/* =========================
-   ARROWS
-========================= */
+/* ARROWS */
 .nav-arrow {
   position:absolute;
   top:50%;
@@ -170,8 +145,7 @@ video, img {
   transition:0.3s;
   padding:20px;
   user-select:none;
-
-  z-index: 20; /* 🔥 ABOVE EVERYTHING */
+  z-index:20;
 }
 
 .nav-arrow.left { left:20px; }
@@ -183,6 +157,32 @@ video, img {
 
 .nav-arrow:hover {
   opacity:1;
+}
+
+/* DOTS */
+.nav-dots{
+  position:fixed;
+  right:20px;
+  bottom:20px;
+  display:flex;
+  flex-direction:column;
+  gap:12px;
+  z-index:999;
+}
+
+.nav-dot{
+  width:10px;
+  height:10px;
+  border-radius:50%;
+  background:#555;
+  cursor:pointer;
+  transition:0.3s;
+}
+
+.nav-dot.active{
+  width:16px;
+  height:16px;
+  background:#fff;
 }
 
 </style>
@@ -212,63 +212,69 @@ video, img {
 <!-- PROJECT 1 -->
 <section class="project below">
   <video autoplay muted loop playsinline>
-    <source src="medival/16_MeiYiFan_v-capture.mp4" type="video/mp4">
+    <source src="medival/16_MeiYiFan_v-capture.mp4">
   </video>
+
   <div class="project-content">
     <h2>Medieval Hall</h2>
     <p>Lighting-driven environment focused on mood.</p>
+
     <div class="links">
       <a href="medival/medieval-breakdown.pdf" target="_blank">Breakdown</a>
     </div>
   </div>
 </section>
 
-<!-- PROJECT 2 -->
+<!-- PROJECT 2 (FIXED) -->
 <section class="project below">
   <video autoplay muted loop playsinline>
-    <source src="scifi/16_meiYifan_buildVid (1)2.mp4" type="video/mp4">
+    <source src="scifi/16_meiYifan_buildVid (1)2.mp4">
   </video>
+
   <div class="project-content">
     <h2>Sci Fi Corridor</h2>
     <p>Storytelling through space and environment.</p>
+
     <div class="links">
       <a href="scifi/scifi-breakdown.pdf" target="_blank">Breakdown</a>
+    </div>
   </div>
 </section>
 
 <!-- PROJECT 3 -->
 <section class="project below">
   <video autoplay muted loop playsinline>
-    <source src="3de/3dde.mp4" type="video/mp4">
+    <source src="3de/3dde.mp4">
   </video>
+
   <div class="project-content">
-    <h2>Island</h2>
-    <p>Level design with VFX.</p>
+    <h2>The Island</h2>
+    <p>level design.</p>
+
   </div>
 </section>
 
 <!-- PROJECT 4 -->
 <section class="project below multi-video">
 
-  <!-- VIDEO 1 -->
   <video class="vid active" autoplay muted loop playsinline>
-    <source src="3cc/13_meiYifan_CLWK4.mp4" type="video/mp4">
+    <source src="3cc/13_meiYifan_CLWK4.mp4">
   </video>
 
-  <!-- VIDEO 2 -->
   <video class="vid" muted loop playsinline>
-    <source src="3cc/Video Project 2.mp4" type="video/mp4">
+    <source src="3cc/Video Project 2.mp4">
   </video>
 
-  <!-- ARROWS -->
   <div class="nav-arrow left">‹</div>
   <div class="nav-arrow right">›</div>
 
   <div class="project-content">
     <h2>YinYang Girl</h2>
     <p>Character design exploration.</p>
+
     <div class="links">
-      <a href="3cc/process.pdf" target="_blank">Design process</a>  
+      <a href="3cc/process.pdf" target="_blank">Design process</a>
+    </div>
   </div>
 
 </section>
@@ -279,6 +285,9 @@ video, img {
 <div class="video-controls" id="controls">
   <input type="range" id="timeline" min="0" max="100" value="0">
 </div>
+
+<!-- DOTS -->
+<div class="nav-dots" id="navDots"></div>
 
 <script>
 
@@ -291,23 +300,21 @@ const timeline = document.getElementById("timeline");
 
 let currentVideo = null;
 
-/* ACTIVE VIDEO */
-function setActiveVideo() {
-  const section = sections[index];
+/* =========================
+   ACTIVE VIDEO
+========================= */
+function setActiveVideo(){
+  const s = sections[index];
+  if(!s) return;
 
-  if (!section) return;
-
-  const multi = section.querySelector(".multi-video");
-
-  if (multi) {
-    currentVideo = multi.querySelector(".vid.active");
-  } else {
-    currentVideo = section.querySelector("video");
-  }
+  const multi = s.querySelector(".multi-video");
+  currentVideo = multi ? multi.querySelector(".vid.active") : s.querySelector("video");
 }
 
-/* SCENES */
-function updateScenes() {
+/* =========================
+   SCENES
+========================= */
+function updateScenes(){
 
   sections.forEach((s,i)=>{
     s.classList.remove("active","above","below");
@@ -319,27 +326,36 @@ function updateScenes() {
 
   setActiveVideo();
 
-  if (currentVideo) {
+  if(currentVideo){
     currentVideo.currentTime = 0;
     timeline.value = 0;
   }
+
+  syncDots();
 }
 
-/* SCROLL */
+/* =========================
+   SCROLL
+========================= */
 window.addEventListener("wheel",(e)=>{
 
   if(isAnimating) return;
   isAnimating = true;
 
-  if(e.deltaY > 0) index = Math.min(index+1, sections.length-1);
-  else index = Math.max(index-1, 0);
+  if(e.deltaY > 0){
+    index = Math.min(index+1, sections.length-1);
+  } else {
+    index = Math.max(index-1, 0);
+  }
 
   updateScenes();
 
   setTimeout(()=>isAnimating=false,900);
 });
 
-/* TIMELINE UI */
+/* =========================
+   TIMELINE SHOW
+========================= */
 document.addEventListener("mousemove",(e)=>{
   if(window.innerHeight - e.clientY < 120){
     controls.classList.add("active");
@@ -348,7 +364,9 @@ document.addEventListener("mousemove",(e)=>{
   }
 });
 
-/* SYNC */
+/* =========================
+   TIMELINE SYNC (FIXED)
+========================= */
 setInterval(()=>{
 
   if(!currentVideo || !currentVideo.duration) return;
@@ -368,14 +386,24 @@ timeline.addEventListener("input",()=>{
 
 });
 
-/* PLAY PAUSE */
+/* =========================
+   PLAY / PAUSE FIX
+========================= */
 document.querySelectorAll("video").forEach(v=>{
   v.addEventListener("click",()=>{
-    v.paused ? v.play() : v.pause();
+
+    if(v.paused){
+      v.play();
+    } else {
+      v.pause();
+    }
+
   });
 });
 
-/* MULTI VIDEO SWITCH */
+/* =========================
+   MULTI VIDEO SWITCH
+========================= */
 document.querySelectorAll(".multi-video").forEach(section=>{
 
   const vids = section.querySelectorAll(".vid");
@@ -407,17 +435,56 @@ document.querySelectorAll(".multi-video").forEach(section=>{
     });
   }
 
-  right.addEventListener("click",(e)=>{
+  right?.addEventListener("click",(e)=>{
     e.stopPropagation();
     switchVideo(1);
   });
 
-  left.addEventListener("click",(e)=>{
+  left?.addEventListener("click",(e)=>{
     e.stopPropagation();
     switchVideo(0);
   });
 
 });
+
+/* =========================
+   DOT SYSTEM (SAFE FIX)
+========================= */
+const nav = document.getElementById("navDots");
+
+function buildDots(){
+
+  if(!nav) return;
+
+  nav.innerHTML = "";
+
+  sections.forEach((_,i)=>{
+    const d = document.createElement("div");
+    d.className = "nav-dot";
+
+    d.onclick = ()=>{
+      index = i;
+      updateScenes();
+    };
+
+    nav.appendChild(d);
+  });
+
+}
+
+function syncDots(){
+
+  if(!nav) return;
+
+  nav.querySelectorAll(".nav-dot")
+    .forEach((d,i)=>{
+      d.classList.toggle("active", i === index);
+    });
+
+}
+
+buildDots();
+syncDots();
 
 </script>
 
