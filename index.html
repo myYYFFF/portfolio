@@ -106,6 +106,28 @@ video, img {
   opacity: 1;
   pointer-events: auto;
 }
+.control-row{
+  display:flex;
+  align-items:center;
+  gap:15px;
+}
+
+#playBtn,
+#muteBtn{
+  background:none;
+  border:none;
+  color:white;
+  font-size:22px;
+  cursor:pointer;
+}
+
+#volumeSlider{
+  width:120px;
+}
+
+#timeline{
+  flex:1;
+}
 
 #timeline {
   width:100%;
@@ -113,7 +135,7 @@ video, img {
 
 /* MULTI VIDEO */
 .multi-video {
-  position: relative;
+  background:#000;
 }
 
 .vid {
@@ -185,6 +207,42 @@ video, img {
   background:#fff;
 }
 
+.image-player {
+  background:#000;
+}
+
+.gallery-img {
+  position:absolute;
+  width:100%;
+  height:100%;
+  object-fit:cover;
+  opacity:0;
+  transition: opacity 0.5s ease;
+  z-index:0;
+}
+
+.gallery-img.active {
+  opacity:1;
+  z-index:1;
+}
+
+.image-player:hover .nav-arrow {
+  opacity:0.5;
+}
+.portrait{
+  object-fit:contain;
+  background:#111;
+}
+
+/* FIX IMAGE + VIDEO SECTIONS */
+section.multi-video,
+section.image-player{
+  position:absolute;
+  inset:0;
+  width:100%;
+  height:100%;
+}
+
 </style>
 </head>
 
@@ -225,6 +283,30 @@ video, img {
   </div>
 </section>
 
+<section class="project below">
+  <video autoplay muted loop playsinline>
+    <source src="paoku/STLD_GravEdge_Walkthrough.mp4">
+  </video>
+
+  <div class="project-content">
+    <h2>Team work, sci fi environment</h2>
+    <p>In charge of modeling, lighing , rendering, vfx, texturing, sound effect, animation, UI concept and visual direction</p>
+
+  </div>
+</section>
+
+<section class="project below">
+  <video autoplay muted loop playsinline>
+    <source src="mars/4Fingers_Trailer.mp4">
+  </video>
+
+  <div class="project-content">
+    <h2>Team work, VR game mars environment exploration</h2>
+    <p>In charge of modeling, lighing , rendering, vfx, texturing, sound effect,  UI concept and visual direction</p>
+
+  </div>
+</section>
+
 <!-- PROJECT 2 (FIXED) -->
 <section class="project below">
   <video autoplay muted loop playsinline>
@@ -254,6 +336,42 @@ video, img {
   </div>
 </section>
 
+<section class="project below image-player">
+
+  <img class="gallery-img active" src="blender/1.jpg">
+  <img class="gallery-img" src="blender/2.jpg">
+  <img class="gallery-img" src="blender/3.jpg">
+  <img class="gallery-img portrait" src="blender/4.jpg">
+  <img class="gallery-img portrait" src="blender/5.png">
+  <img class="gallery-img portrait" src="blender/6.png">
+  <img class="gallery-img portrait" src="blender/7.png">
+  <img class="gallery-img portrait" src="blender/8.jpg">
+  <img class="gallery-img portrait" src="blender/9.jpg">
+  <img class="gallery-img portrait" src="blender/10.jpg">
+  <img class="gallery-img portrait" src="blender/11.jpg">
+  <img class="gallery-img portrait" src="blender/12.jpg">
+  <img class="gallery-img portrait" src="blender/13.jpg">
+  <img class="gallery-img portrait" src="blender/14.jpg">
+  <img class="gallery-img portrait" src="blender/15.jpg">
+  <img class="gallery-img portrait" src="blender/16.jpg">
+  <img class="gallery-img portrait" src="blender/17.jpg">
+  <img class="gallery-img portrait" src="blender/18.jpg">
+  <img class="gallery-img portrait" src="blender/19.jpg">
+  <img class="gallery-img portrait" src="blender/20.jpg">
+  <img class="gallery-img portrait" src="blender/21.jpg">
+
+
+  <div class="nav-arrow left">‹</div>
+  <div class="nav-arrow right">›</div>
+
+  <div class="project-content">
+    <h2>Early self-initiated work</h2>
+    <p>Blender practice works and drawings(by pen, pencil and procreate).</p>
+  </div>
+
+</section>
+
+
 <!-- PROJECT 4 -->
 <section class="project below multi-video">
 
@@ -270,7 +388,7 @@ video, img {
 
   <div class="project-content">
     <h2>YinYang Girl</h2>
-    <p>Character design exploration.</p>
+    <p>Multi-player online game character design.</p>
 
     <div class="links">
       <a href="3cc/process.pdf" target="_blank">Design process</a>
@@ -281,13 +399,43 @@ video, img {
 
 </div>
 
-<!-- TIMELINE -->
+<!-- TIMELINE + AUDIO -->
 <div class="video-controls" id="controls">
-  <input type="range" id="timeline" min="0" max="100" value="0">
-</div>
 
+  <div class="control-row">
+
+    <!-- PLAY / PAUSE -->
+    <button id="playBtn">⏸</button>
+
+    <!-- SPEAKER -->
+    <button id="muteBtn">🔊</button>
+
+    <!-- VOLUME -->
+    <input
+      type="range"
+      id="volumeSlider"
+      min="0"
+      max="1"
+      step="0.01"
+      value="1"
+    >
+
+    <!-- TIMELINE -->
+    <input
+      type="range"
+      id="timeline"
+      min="0"
+      max="100"
+      value="0"
+    >
+
+  </div>
+
+</div>
 <!-- DOTS -->
-<div class="nav-dots" id="navDots"></div>
+<div class="nav-dots" id="navDots">
+
+</div>
 
 <script>
 
@@ -297,25 +445,62 @@ let isAnimating = false;
 const sections = document.querySelectorAll("section");
 const controls = document.getElementById("controls");
 const timeline = document.getElementById("timeline");
+const muteBtn = document.getElementById("muteBtn");
+const volumeSlider = document.getElementById("volumeSlider");
+const playBtn = document.getElementById("playBtn");
 
 let currentVideo = null;
+let globalMuted = true;
+let globalVolume = 1;
 
-/* =========================
-   ACTIVE VIDEO
-========================= */
+/* STOP ALL OTHER VIDEOS */
+function stopOtherVideos(){
+  document.querySelectorAll("video").forEach(v=>{
+    if(v !== currentVideo){
+      v.pause();
+      v.currentTime = 0;
+      v.muted = true;
+    }
+  });
+}
+
+/* ACTIVE VIDEO */
 function setActiveVideo(){
   const s = sections[index];
   if(!s) return;
 
-  const multi = s.querySelector(".multi-video");
-  currentVideo = multi ? multi.querySelector(".vid.active") : s.querySelector("video");
+  currentVideo = s.querySelector(".vid.active") || s.querySelector("video");
+
+  stopOtherVideos();
+  applyAudio();
+
+  if(currentVideo){
+    playBtn.textContent = currentVideo.paused ? "▶" : "⏸";
+  }
 }
 
-/* =========================
-   SCENES
-========================= */
-function updateScenes(){
+/* AUDIO */
+function applyAudio(){
+  if(!currentVideo) return;
 
+  currentVideo.muted = globalMuted;
+  currentVideo.volume = globalVolume;
+
+  muteBtn.textContent = globalMuted ? "🔇" : "🔊";
+}
+
+/* SAFE PLAY */
+function safePlay(video){
+  if(!video) return;
+
+  video.play().catch(()=>{
+    video.muted = true;
+    video.play().catch(()=>{});
+  });
+}
+
+/* SCENES */
+function updateScenes(){
   sections.forEach((s,i)=>{
     s.classList.remove("active","above","below");
 
@@ -329,33 +514,29 @@ function updateScenes(){
   if(currentVideo){
     currentVideo.currentTime = 0;
     timeline.value = 0;
+    safePlay(currentVideo);
   }
 
   syncDots();
 }
 
-/* =========================
-   SCROLL
-========================= */
+/* SCROLL */
 window.addEventListener("wheel",(e)=>{
-
   if(isAnimating) return;
   isAnimating = true;
 
   if(e.deltaY > 0){
-    index = Math.min(index+1, sections.length-1);
+    index = Math.min(index + 1, sections.length - 1);
   } else {
-    index = Math.max(index-1, 0);
+    index = Math.max(index - 1, 0);
   }
 
   updateScenes();
 
-  setTimeout(()=>isAnimating=false,900);
+  setTimeout(()=>isAnimating = false, 900);
 });
 
-/* =========================
-   TIMELINE SHOW
-========================= */
+/* SHOW CONTROL BAR */
 document.addEventListener("mousemove",(e)=>{
   if(window.innerHeight - e.clientY < 120){
     controls.classList.add("active");
@@ -364,48 +545,74 @@ document.addEventListener("mousemove",(e)=>{
   }
 });
 
-/* =========================
-   TIMELINE SYNC (FIXED)
-========================= */
+/* TIMELINE SYNC */
 setInterval(()=>{
-
   if(!currentVideo || !currentVideo.duration) return;
 
   timeline.value =
     (currentVideo.currentTime / currentVideo.duration) * 100;
-
 },80);
 
-/* SCRUB */
+/* TIMELINE SCRUB */
 timeline.addEventListener("input",()=>{
-
   if(!currentVideo || !currentVideo.duration) return;
 
   currentVideo.currentTime =
     (timeline.value / 100) * currentVideo.duration;
-
 });
 
-/* =========================
-   PLAY / PAUSE FIX
-========================= */
+/* PLAY / PAUSE BUTTON */
+playBtn.addEventListener("click",()=>{
+  if(!currentVideo) return;
+
+  if(currentVideo.paused){
+    safePlay(currentVideo);
+    playBtn.textContent = "⏸";
+  } else {
+    currentVideo.pause();
+    playBtn.textContent = "▶";
+  }
+});
+
+/* CLICK VIDEO TO PLAY / PAUSE */
 document.querySelectorAll("video").forEach(v=>{
   v.addEventListener("click",()=>{
+    if(v !== currentVideo) return;
 
     if(v.paused){
-      v.play();
+      safePlay(v);
+      playBtn.textContent = "⏸";
     } else {
       v.pause();
+      playBtn.textContent = "▶";
     }
-
   });
 });
 
-/* =========================
-   MULTI VIDEO SWITCH
-========================= */
-document.querySelectorAll(".multi-video").forEach(section=>{
+/* MUTE BUTTON */
+muteBtn.addEventListener("click",()=>{
+  globalMuted = !globalMuted;
+  applyAudio();
 
+  if(currentVideo){
+    safePlay(currentVideo);
+  }
+});
+
+/* VOLUME SLIDER */
+volumeSlider.addEventListener("input",()=>{
+  globalVolume = Number(volumeSlider.value);
+  globalMuted = globalVolume <= 0;
+
+  applyAudio();
+
+  if(currentVideo){
+    safePlay(currentVideo);
+  }
+});
+
+/* MULTI VIDEO SWITCH */
+document.querySelectorAll(".multi-video").forEach(section=>{
   const vids = section.querySelectorAll(".vid");
   const left = section.querySelector(".nav-arrow.left");
   const right = section.querySelector(".nav-arrow.right");
@@ -413,26 +620,28 @@ document.querySelectorAll(".multi-video").forEach(section=>{
   let i = 0;
 
   function switchVideo(n){
-
     vids.forEach(v=>{
       v.classList.remove("active");
       v.pause();
+      v.currentTime = 0;
+      v.muted = true;
     });
 
     i = n;
 
     const v = vids[i];
     v.classList.add("active");
-
     v.currentTime = 0;
 
     currentVideo = v;
+
+    stopOtherVideos();
+    applyAudio();
+
     timeline.value = 0;
 
-    v.play().catch(()=>{
-      v.muted = true;
-      v.play();
-    });
+    safePlay(v);
+    playBtn.textContent = "⏸";
   }
 
   right?.addEventListener("click",(e)=>{
@@ -444,16 +653,39 @@ document.querySelectorAll(".multi-video").forEach(section=>{
     e.stopPropagation();
     switchVideo(0);
   });
-
 });
 
-/* =========================
-   DOT SYSTEM (SAFE FIX)
-========================= */
+/* IMAGE PLAYER */
+document.querySelectorAll(".image-player").forEach(section=>{
+  const imgs = section.querySelectorAll(".gallery-img");
+  const left = section.querySelector(".nav-arrow.left");
+  const right = section.querySelector(".nav-arrow.right");
+
+  let imgIndex = 0;
+
+  function showImage(n){
+    imgs[imgIndex].classList.remove("active");
+
+    imgIndex = (n + imgs.length) % imgs.length;
+
+    imgs[imgIndex].classList.add("active");
+  }
+
+  right?.addEventListener("click",(e)=>{
+    e.stopPropagation();
+    showImage(imgIndex + 1);
+  });
+
+  left?.addEventListener("click",(e)=>{
+    e.stopPropagation();
+    showImage(imgIndex - 1);
+  });
+});
+
+/* DOT SYSTEM */
 const nav = document.getElementById("navDots");
 
 function buildDots(){
-
   if(!nav) return;
 
   nav.innerHTML = "";
@@ -469,22 +701,20 @@ function buildDots(){
 
     nav.appendChild(d);
   });
-
 }
 
 function syncDots(){
-
   if(!nav) return;
 
   nav.querySelectorAll(".nav-dot")
     .forEach((d,i)=>{
       d.classList.toggle("active", i === index);
     });
-
 }
 
 buildDots();
 syncDots();
+setActiveVideo();
 
 </script>
 
